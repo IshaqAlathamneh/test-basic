@@ -5,6 +5,8 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const User = require('./model/users-model');
+const path = require('path');
+const acl = require('../src/middleware/acl.js');
 // const notFoundHandler = require('./middleware/404');
 // const errorHandler = require('./middleware/500');
 // const routs = require('./auth/router')
@@ -26,6 +28,8 @@ app.use(cookieSession({
 app.use(express.urlencoded({ extended: true }));
 // app.use(routs)
 
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
@@ -39,7 +43,7 @@ app
       user: userRecord,
       token: userRecord.token
     };
-    res.status(201).json(output);
+    res.sendFile(path.join(__dirname+'/create_course.html'));
 })
 // app.get('/oauth/google', (req,res) => {
 //     res.send()
@@ -87,7 +91,7 @@ app.get( '/auth/facebook/callback',
 }));
 app.get( '/auth/facebook/success', (req, res) => {
     console.log('inside -----------------------------/auth/facebook/callback',req.body);
-    res.send('facebook done')
+    res.send('facebook sucess');
 });
 app.get('/auth/facebook/failure', (req,res) => {
     res.send('failed login')
@@ -97,14 +101,29 @@ app.get('/auth/google/failure', (req,res) => {
 })
 app.get('/auth/google/success', (req,res) => {
     console.log(' in /auth/google/success route--------------',req.body);
-    res.send('success login')
+    res.send('Google sucess');
+    
+
 })
 
+app.post("/create-course" , bearerAuth, acl('create'), async (req, res , next) => {
+
+  console.log('post req ' , req.body.user);
+  const users = await User.find({});
+  const list = users.map(user => user.username);
+  res.status(200).json(list);
+});
+
 function start(){
-    const PORT = process.env.PORT;
+
+const PORT = process.env.PORT;
     app.listen(PORT, () => {
         console.log(`I'm in port ${PORT}`)
     })
+}
+
+function nextPage(){
+
 }
 // app.use('*', notFoundHandler);
 // app.use(errorHandler);

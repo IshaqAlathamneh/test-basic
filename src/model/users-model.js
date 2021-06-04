@@ -10,7 +10,9 @@ const users = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   gender: { type: String, required: true },
-  birthDate: { type: Date, required: true }
+  birthDate: { type: Date, required: true }, 
+  role: { type: String, required: true, default: 'student', enum: ['student', 'instructor'] },
+
 });
 
 // Adds a virtual field to the schema. We can see it, but it never persists
@@ -54,6 +56,15 @@ users.statics.authenticateWithToken = async function (token) {
     throw new Error(e.message)
   }
 }
+
+users.virtual('capabilities').get(function () {
+  let acl = {
+    student: ['enroll'],
+    instructor: ['enroll' , 'create']
+  };
+  return acl[this.role];
+});
+
 
 
 module.exports = mongoose.model('users', users);
