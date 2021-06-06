@@ -5,8 +5,8 @@ const users = require('../model/users-model')
 module.exports = async (req, res, next) => {
 
   try {
-    console.log('post req ', req.body);
-    console.log('Headers ', req.headers);
+    console.log('Bearer : post req ', req.body);
+    console.log('Bearer : Headers ', req.headers);
 
 
     if (!req.headers.authorization) { next('Bearer: Invalid Login') }

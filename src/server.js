@@ -109,14 +109,9 @@ app.get('/auth/google/success', (req,res) => {
 
 })
 
-app.post("/create-course" , async (req, res , next) => {
-
-  console.log('post req ' , req.body);
-  console.log('Headers ' , req.headers);
-
-  const users = await User.find({});
-  const list = users.map(user => user.username);
-  res.status(200).json(list);
+app.post("/create-course" , bearerAuth , async (req, res , next) => {
+  console.log('All good');
+  res.send('course created');
 });
 
 function start(){

@@ -50,22 +50,21 @@
       event.preventDefault();
 
       const data= {
-        courseName: $('#course-name').val(),
-                  fields: $('#fields').val(),
-                  period: $('#period').val(),
-                  time: $('#time').val()
+                  "courseName": `${$('#course-name').val()}`,
+                  "fields": `${$('#fields').val()}`,
+                  "period": `${$('#period').val()}`,
+                  "time": `${$('#time').val()}`
       }
     $.ajax({
           url: "http://localhost:3000/create-course",
           type: 'POST',
-          data: { 
-                  data
-                },
+          data: JSON.stringify(data),
           contentType: 'application/json',
           headers: {
                     "Authorization": "Bearer " + cookie.token
                  },
-          async: false
+          async: false,
+          user: cookie.user
             });
 
             console.log('ajax');

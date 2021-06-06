@@ -59,8 +59,7 @@ users.statics.authenticateWithToken = async function (token) {
 
 users.virtual('capabilities').get(function () {
   let acl = {
-    student: ['enroll'],
-    instructor: ['enroll' , 'create']
+    owner: ['create-assignment' , 'create-quiz' ,'marks'],
   };
   return acl[this.role];
 });

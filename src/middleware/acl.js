@@ -3,7 +3,7 @@
 module.exports = (capability) => {
 
   return (req, res, next) => {
-    console.log('Middleware' , req);
+    console.log('Middleware' , req.user);
 
     try {
       if (req.user.capabilities.includes(capability)) {
