@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create-Course</title>
 </head>
+
 <body>
   <main>
-    <form action="/create-course">
+    <form>
       <label for="course-name">
         <input type="text" name="course-name" id="course-name">
       </label>
       <label for="course-field">
-        <select name="fields" id="fields">
+        <select name="course-field" id="fields">
           <option value="math">Math</option>
           <option value="english">English</option>
           <option value="science">Science</option>
@@ -21,19 +23,54 @@
         </select>
       </label>
       <label for="period">
-        <input type="number"> 
+        <input type="number" id="period">
         <select name="time" id="time">
           <option value="months">Months</option>
           <option value="weeks">Weeks</option>
           <option value="years">Years</option>
         </select>
       </label>
-      <button type="submit">Create</button>
+      <button type="submit" id="submitButton">Create</button>
     </form>
   </main>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    
+
+    function getCookie(cname) {
+      const cookie = decodeURIComponent(document.cookie);
+      const cookieObj = cookie.split('=').pop();
+      const prettyCookie = JSON.parse(cookieObj);
+      return prettyCookie;
+    }
+    const cookie = getCookie();
+
+
+    $('#submitButton').on('click',function(event){
+      event.preventDefault();
+
+      const data= {
+        courseName: $('#course-name').val(),
+                  fields: $('#fields').val(),
+                  period: $('#period').val(),
+                  time: $('#time').val()
+      }
+    $.ajax({
+          url: "http://localhost:3000/create-course",
+          type: 'POST',
+          data: { 
+                  data
+                },
+          contentType: 'application/json',
+          headers: {
+                    "Authorization": "Bearer " + cookie.token
+                 },
+          async: false
+            });
+
+            console.log('ajax');
+          });
   </script>
 </body>
+
 </html>

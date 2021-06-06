@@ -43,6 +43,9 @@ app
       user: userRecord,
       token: userRecord.token
     };
+
+    console.log(output);
+    res.cookie('user', JSON.stringify(output));
     res.sendFile(path.join(__dirname+'/create_course.html'));
 })
 // app.get('/oauth/google', (req,res) => {
@@ -106,9 +109,11 @@ app.get('/auth/google/success', (req,res) => {
 
 })
 
-app.post("/create-course" , bearerAuth, acl('create'), async (req, res , next) => {
+app.post("/create-course" , async (req, res , next) => {
 
-  console.log('post req ' , req.body.user);
+  console.log('post req ' , req.body);
+  console.log('Headers ' , req.headers);
+
   const users = await User.find({});
   const list = users.map(user => user.username);
   res.status(200).json(list);
